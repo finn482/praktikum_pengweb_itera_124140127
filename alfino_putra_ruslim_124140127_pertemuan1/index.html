@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="KantinKu Mini POS - aplikasi kasir dan keranjang belanja sederhana.">
+  <title>KantinKu — Mini POS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="KantinKu beranda">
+      <span class="brand-mark" aria-hidden="true">K</span>
+      <span>KantinKu</span>
+    </a>
+    <div class="topbar-meta">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span>Mode kasir aktif</span>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">MINI POS · KANTIN KAMPUS</p>
+        <h1 id="page-title">Transaksi lebih rapi,<br><span>layanan lebih cepat.</span></h1>
+        <p class="hero-copy">Kelola keranjang, hitung diskon, dan selesaikan pembayaran dalam satu layar.</p>
+      </div>
+      <div class="hero-note" aria-label="Informasi promo">
+        <span class="hero-note-icon" aria-hidden="true">%</span>
+        <div>
+          <strong>Diskon otomatis 10%</strong>
+          <span>Berlaku untuk belanja mulai Rp 50.000</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="Area transaksi">
+      <div class="panel form-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">01 · INPUT PRODUK</p>
+            <h2>Tambah barang</h2>
+          </div>
+          <span class="step-badge">Langkah 1</span>
+        </div>
+
+        <form id="product-form" novalidate>
+          <div class="field-group">
+            <label for="product-name">Nama barang</label>
+            <input id="product-name" name="productName" type="text" placeholder="Contoh: Buku Tulis" autocomplete="off" aria-describedby="product-name-error">
+            <small id="product-name-error" class="field-error" role="alert"></small>
+          </div>
+          <div class="field-group">
+            <label for="unit-price">Harga satuan</label>
+            <div class="input-prefix"><span>Rp</span><input id="unit-price" name="unitPrice" type="number" min="500" step="1" placeholder="0" aria-describedby="unit-price-error"></div>
+            <small id="unit-price-error" class="field-error" role="alert"></small>
+          </div>
+          <div class="field-group">
+            <label for="quantity">Jumlah / qty</label>
+            <input id="quantity" name="quantity" type="number" min="1" step="1" placeholder="1" aria-describedby="quantity-error">
+            <small id="quantity-error" class="field-error" role="alert"></small>
+          </div>
+          <button class="button button-primary button-full" type="submit">
+            <span aria-hidden="true">+</span> Tambahkan ke keranjang
+          </button>
+          <p id="form-success" class="form-success" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="panel cart-panel">
+        <div class="panel-heading cart-heading">
+          <div>
+            <p class="section-kicker">02 · DAFTAR BELANJA</p>
+            <h2>Keranjang <span id="cart-count" class="count-badge">0</span></h2>
+          </div>
+          <button id="reset-transaction" class="button button-outline" type="button">Transaksi baru</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Daftar barang dalam keranjang belanja</caption>
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Nama barang</th>
+                <th scope="col">Harga satuan</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Subtotal</th>
+                <th scope="col"><span class="sr-only">Aksi</span></th>
+              </tr>
+            </thead>
+            <tbody id="cart-body"></tbody>
+          </table>
+          <div id="empty-cart" class="empty-state">
+            <div class="empty-icon" aria-hidden="true">▤</div>
+            <strong>Keranjang masih kosong</strong>
+            <span>Tambahkan barang dari formulir untuk memulai transaksi.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary-grid" aria-label="Ringkasan pembayaran">
+      <div class="panel calculation-panel">
+        <div class="panel-heading compact-heading">
+          <div>
+            <p class="section-kicker">03 · RINGKASAN</p>
+            <h2>Perhitungan</h2>
+          </div>
+          <span class="calculation-icon" aria-hidden="true">Σ</span>
+        </div>
+        <div class="summary-lines">
+          <div><span>Total belanja</span><strong id="subtotal-display">Rp 0</strong></div>
+          <div class="discount-line"><span>Diskon <small id="discount-note">(min. Rp 50.000)</small></span><strong id="discount-display">− Rp 0</strong></div>
+          <div class="total-line"><span>Total akhir</span><strong id="total-display">Rp 0</strong></div>
+        </div>
+        <div class="promo-box">
+          <label for="promo-code">Punya kode promo?</label>
+          <div class="promo-input-row">
+            <input id="promo-code" type="text" placeholder="Contoh: HEMAT10" autocomplete="off" aria-describedby="promo-message">
+            <button id="apply-promo" class="button button-secondary" type="button">Pakai</button>
+          </div>
+          <small id="promo-message" class="helper-text" role="status" aria-live="polite">Gunakan HEMAT10 untuk mengaktifkan diskon.</small>
+        </div>
+      </div>
+
+      <div class="panel payment-panel">
+        <div class="panel-heading compact-heading">
+          <div>
+            <p class="section-kicker">04 · PEMBAYARAN</p>
+            <h2>Uang diterima</h2>
+          </div>
+          <span class="payment-icon" aria-hidden="true">→</span>
+        </div>
+        <div class="payment-field">
+          <label for="payment">Nominal uang bayar</label>
+          <div class="input-prefix large"><span>Rp</span><input id="payment" type="number" min="0" step="1" placeholder="0" inputmode="numeric"></div>
+        </div>
+        <div id="payment-result" class="payment-result neutral" aria-live="polite">
+          <span class="result-label">Status pembayaran</span>
+          <strong>Masukkan nominal uang bayar</strong>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>KantinKu Mini POS</span>
+      <span>LocalStorage aktif · Data tersimpan otomatis di browser</span>
+    </footer>
+  </main>
+</body>
+</html>
