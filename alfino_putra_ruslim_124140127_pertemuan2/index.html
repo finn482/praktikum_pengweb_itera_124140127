@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="StudyFlow - dashboard tugas dan produktivitas mahasiswa.">
+  <title>StudyFlow — Personal Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="StudyFlow beranda"><span class="brand-mark">S</span><span>StudyFlow</span></a>
+    <div class="topbar-actions">
+      <span class="sync-status"><span class="sync-dot" aria-hidden="true"></span> Tersimpan lokal</span>
+      <div class="avatar" aria-label="Profil Alfino">AR</div>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="welcome-row" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">DASHBOARD MAHASISWA · SEMESTER 5</p>
+        <h1 id="page-title">Selamat datang, Alfino.</h1>
+        <p class="subtitle">Satu ruang untuk menjaga fokus, menyusun prioritas, dan menyelesaikan kuliah.</p>
+      </div>
+      <div class="date-card">
+        <span class="date-label">HARI INI</span>
+        <strong id="current-date">Memuat tanggal...</strong>
+      </div>
+    </section>
+
+    <section class="insight-grid" aria-label="Ringkasan produktivitas">
+      <article class="insight-card focus-card">
+        <div class="insight-icon focus-icon" aria-hidden="true">↗</div>
+        <div><span class="insight-label">TUGAS AKTIF</span><strong id="active-count">0</strong><small>perlu diselesaikan</small></div>
+      </article>
+      <article class="insight-card">
+        <div class="insight-icon done-icon" aria-hidden="true">✓</div>
+        <div><span class="insight-label">SELESAI</span><strong id="done-count">0</strong><small>tugas terselesaikan</small></div>
+      </article>
+      <article class="insight-card">
+        <div class="insight-icon urgent-icon" aria-hidden="true">!</div>
+        <div><span class="insight-label">PRIORITAS TINGGI</span><strong id="urgent-count">0</strong><small>butuh perhatian</small></div>
+      </article>
+      <article class="quote-card">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <div><span class="insight-label">CATATAN HARI INI</span><p id="quote-text">Mengambil inspirasi...</p><small id="quote-author">— StudyFlow</small></div>
+        <button id="refresh-quote" class="icon-button" type="button" aria-label="Muat kutipan baru" title="Muat kutipan baru">↻</button>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <div class="tasks-panel panel">
+        <div class="panel-heading">
+          <div><p class="section-kicker">RUANG KERJA</p><h2>Daftar tugas</h2></div>
+          <button id="add-task-button" class="button button-primary" type="button"><span aria-hidden="true">+</span> Tambah tugas</button>
+        </div>
+        <div class="toolbar">
+          <div class="search-wrap">
+            <span aria-hidden="true">⌕</span>
+            <label class="sr-only" for="search-task">Cari tugas</label>
+            <input id="search-task" type="search" placeholder="Cari tugas atau mata kuliah...">
+          </div>
+          <div class="filter-tabs" role="group" aria-label="Filter tugas">
+            <button class="filter-tab active" type="button" data-filter="all">Semua</button>
+            <button class="filter-tab" type="button" data-filter="active">Aktif</button>
+            <button class="filter-tab" type="button" data-filter="done">Selesai</button>
+          </div>
+        </div>
+        <div id="task-list" class="task-list" aria-live="polite"></div>
+        <div id="empty-tasks" class="empty-tasks" hidden>
+          <div class="empty-illustration" aria-hidden="true">✓</div>
+          <strong>Tidak ada tugas di sini</strong>
+          <span>Tambahkan tugas baru atau ubah filter pencarian.</span>
+        </div>
+      </div>
+
+      <aside class="side-column">
+        <section class="panel week-panel">
+          <div class="panel-heading compact"><div><p class="section-kicker">AGENDA</p><h2>Minggu ini</h2></div><span class="calendar-icon" aria-hidden="true">▦</span></div>
+          <div id="week-agenda" class="week-agenda"></div>
+        </section>
+        <section class="tip-card">
+          <div class="tip-icon" aria-hidden="true">✦</div>
+          <div><strong>Tip produktif</strong><p>Mulai dari tugas paling kecil. Momentum akan membawamu lebih jauh.</p></div>
+        </section>
+      </aside>
+    </section>
+    <footer class="footer"><span>StudyFlow · Personal Dashboard</span><span>Data tersimpan aman di browser perangkat ini</span></footer>
+  </main>
+
+  <dialog id="task-dialog" class="task-dialog">
+    <form id="task-form" method="dialog" novalidate>
+      <div class="dialog-heading"><div><p class="section-kicker">TUGAS BARU</p><h2 id="dialog-title">Tambah tugas</h2></div><button id="close-dialog" class="close-button" type="button" aria-label="Tutup dialog">×</button></div>
+      <input id="task-id" type="hidden">
+      <div class="form-field full-field"><label for="task-title">Nama tugas <span>*</span></label><input id="task-title" type="text" placeholder="Contoh: Laporan praktikum JavaScript" required><small id="title-error" class="error-message"></small></div>
+      <div class="form-row"><div class="form-field"><label for="task-course">Mata kuliah</label><input id="task-course" type="text" placeholder="Contoh: PAW"></div><div class="form-field"><label for="task-due">Deadline <span>*</span></label><input id="task-due" type="date" required><small id="due-error" class="error-message"></small></div></div>
+      <div class="form-row"><div class="form-field"><label for="task-priority">Prioritas</label><select id="task-priority"><option value="high">Tinggi</option><option value="medium" selected>Sedang</option><option value="low">Rendah</option></select></div><div class="form-field"><label for="task-note">Catatan singkat</label><input id="task-note" type="text" placeholder="Opsional"></div></div>
+      <div class="dialog-actions"><button id="cancel-dialog" class="button button-ghost" type="button">Batal</button><button class="button button-primary" type="submit">Simpan tugas</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
