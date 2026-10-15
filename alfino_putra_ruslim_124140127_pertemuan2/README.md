@@ -23,6 +23,10 @@ alfino_putra_ruslim_124140127_pertemuan2/
 ├── style.css
 ├── script.js
 ├── README.md
+├── screenshots/
+│   ├── 01-dashboard.png
+│   ├── 02-dialog-tugas.png
+│   └── 03-dashboard-interaktif.png
 └── modul/
     └── catatan-implementasi.md
 ```
@@ -79,15 +83,27 @@ Keduanya gratis dan tidak memerlukan API key. Jika koneksi gagal, aplikasi tetap
 4. Klik **Tambah tugas**, isi form, lalu simpan.
 5. Uji fitur edit, hapus, filter, pencarian, checklist, dan refresh halaman.
 
-## Screenshot untuk Laporan
+## Screenshot Antarmuka
 
-Ambil dan lampirkan minimal screenshot berikut pada laporan praktikum:
+Screenshot di bawah ini diambil dari hasil aplikasi dan disalin ke folder `screenshots/` agar dapat ditampilkan langsung pada repository GitHub.
 
-1. **Dashboard utama:** statistik, daftar tugas, agenda, dan kutipan.
-2. **Dialog tambah/edit:** form tugas dengan deadline dan prioritas.
-3. **Dashboard setelah interaksi:** tugas baru, status selesai, filter, dan statistik yang berubah.
+### 1. Dashboard utama
 
-Screenshot dapat diberi nama `01-dashboard.png`, `02-dialog-tugas.png`, dan `03-dashboard-interaktif.png`.
+Menampilkan statistik tugas, daftar tugas, agenda deadline, dan kutipan motivasi.
+
+![Dashboard utama](screenshots/01-dashboard.png)
+
+### 2. Dialog tambah atau edit tugas
+
+Menampilkan form untuk memasukkan judul tugas, mata kuliah, deadline, prioritas, dan catatan.
+
+![Dialog tambah tugas](screenshots/02-dialog-tugas.png)
+
+### 3. Dashboard setelah interaksi
+
+Menampilkan perubahan status tugas, filter, statistik, dan data tugas setelah pengguna berinteraksi.
+
+![Dashboard interaktif](screenshots/03-dashboard-interaktif.png)
 
 ## Catatan Pengumpulan
 
