@@ -1,44 +1,54 @@
 # Sudut Baca — Aplikasi Manajemen Buku Pribadi
 
-Sudut Baca adalah aplikasi React sederhana untuk mencatat buku yang sudah dimiliki, sedang dibaca, atau ingin dibeli. Aplikasi ini saya buat karena daftar buku biasanya cepat tercecer kalau hanya dicatat di notes. Dengan dashboard ini, status koleksi bisa dilihat dan diperbarui dari satu tempat.
-
 ## Identitas
 
 - **Nama:** Alfino Putra Ruslim
 - **NIM:** 124140127
 - **Kelas:** RA
-- **Pertemuan:** 3 — React dan Manajemen State
+- **Pertemuan:** 3 — React
+
+## Deskripsi Aplikasi
+
+Sudut Baca adalah aplikasi sederhana untuk mencatat koleksi buku pribadi. Saya membuat aplikasi ini karena daftar buku yang ingin dibaca biasanya mudah lupa atau tercecer kalau hanya dicatat di notes. Melalui aplikasi ini, buku bisa dikelompokkan berdasarkan statusnya, yaitu sudah punya, sedang dibaca, atau ingin dibeli.
+
+Selain mencatat buku, pengguna juga bisa mencari buku berdasarkan judul atau penulis, mengedit data, menghapus buku, dan menandai buku yang sudah selesai dibaca. Data buku disimpan di browser menggunakan `localStorage`, jadi data tidak hilang ketika halaman di-refresh.
 
 ## Fitur Aplikasi
 
-- Tambah buku dengan judul, penulis, status, dan catatan.
-- Edit detail buku.
-- Hapus buku dengan konfirmasi.
-- Tandai buku selesai dibaca atau kembalikan ke status belum selesai.
-- Filter berdasarkan status: semua, sudah punya, sedang baca, dan ingin beli.
-- Pencarian berdasarkan judul atau penulis.
-- Halaman statistik koleksi buku melalui React Router.
-- Data tetap tersimpan setelah browser di-refresh menggunakan `localStorage`.
-- Feedback error ketika judul atau penulis belum diisi.
-- Tampilan responsif untuk desktop dan layar kecil.
+- Menambahkan buku baru dengan judul, penulis, status, dan catatan.
+- Mengedit data buku yang sudah tersimpan.
+- Menghapus buku dengan konfirmasi.
+- Menandai buku sebagai selesai dibaca.
+- Filter buku berdasarkan status.
+- Pencarian berdasarkan judul atau nama penulis.
+- Halaman statistik koleksi pada route `/stats`.
+- Penyimpanan data otomatis menggunakan `localStorage`.
+- Validasi form untuk judul dan penulis yang wajib diisi.
+- Feedback error visual ketika input masih kosong.
+- Tampilan responsif untuk desktop dan mobile.
 
-## Teknologi yang Dipakai
+## Teknologi yang Digunakan
 
-- React 19 dengan functional components dan Hooks.
-- Vite sebagai build tool.
-- React Router untuk halaman Koleksi dan Statistik.
-- Context API untuk state buku.
-- PropTypes untuk validasi props komponen.
-- Vitest dan React Testing Library untuk unit test.
-- CSS biasa dengan pendekatan komponen agar tidak bergantung pada framework UI.
+- React dengan functional components dan Hooks.
+- Vite untuk menjalankan project dan membuat build.
+- React Router untuk navigasi halaman Koleksi dan Statistik.
+- Context API untuk mengatur state buku.
+- PropTypes untuk mengecek props pada komponen.
+- Vitest dan React Testing Library untuk unit testing.
+- CSS biasa untuk styling tampilan.
 
-## Struktur Folder
+## Struktur Folder Utama
 
 ```text
 alfino_putra_ruslim_124140127_pertemuan3/
 ├── index.html
 ├── package.json
 ├── vite.config.js
+├── screenshots/
+│   ├── 01-koleksi-buku.png
+│   ├── 02-form-validasi.png
+│   ├── 03-halaman-statistik.png
+│   └── testing-result.png
 └── src/
     ├── App.jsx
     ├── App.css
@@ -49,7 +59,8 @@ alfino_putra_ruslim_124140127_pertemuan3/
     │   ├── BookForm/
     │   └── BookList/
     ├── context/
-    │   └── BookContext.jsx
+    │   ├── BookContext.jsx
+    │   └── bookConstants.js
     ├── hooks/
     │   ├── useBookStats.js
     │   └── useLocalStorage.js
@@ -61,80 +72,147 @@ alfino_putra_ruslim_124140127_pertemuan3/
         └── setup.js
 ```
 
-## Instalasi dan Menjalankan
+## Instalasi dan Cara Menjalankan
 
-Pastikan Node.js sudah terpasang, kemudian jalankan dari folder project:
+Pastikan Node.js dan npm sudah terpasang. Buka folder project menggunakan VS Code, kemudian buka terminal PowerShell di dalam VS Code.
 
-```bash
+Masuk ke folder project jika terminal masih berada di folder repository utama:
+
+```powershell
+cd .\alfino_putra_ruslim_124140127_pertemuan3
+```
+
+Install dependency:
+
+```powershell
 npm install
+```
+
+Jalankan aplikasi dalam mode development:
+
+```powershell
 npm run dev
 ```
 
-Buka URL yang muncul di terminal, biasanya `http://localhost:5173`.
+Setelah itu buka alamat yang muncul di terminal, biasanya:
 
-Perintah lain yang tersedia:
-
-```bash
-npm run build    # membuat build production
-npm run lint     # memeriksa masalah lint
-npm test         # menjalankan unit test sekali
-npm run test:watch
+```text
+http://localhost:5173/
 ```
 
-## Penjelasan Implementasi React
+Untuk menghentikan server, tekan `Ctrl + C`.
 
-### `useState` dan `useEffect`
+Perintah lain yang bisa digunakan:
 
-`BookForm` menggunakan `useState` untuk nilai input dan pesan validasi. `useEffect` dipakai untuk mengisi ulang form ketika mode edit menerima buku yang berbeda. Hook `useLocalStorage` juga memakai `useEffect` untuk menyimpan perubahan state ke browser.
+```powershell
+npm test          # menjalankan unit test
+npm run lint      # mengecek masalah lint
+npm run build     # membuat build production
+npm run preview   # melihat hasil build production
+```
+
+## Penjelasan Fitur React yang Digunakan
+
+### Functional Components dan Hooks
+
+Komponen aplikasi dibuat menggunakan function component. `useState` digunakan pada `BookForm` untuk menyimpan nilai input, mode edit, serta pesan error. `useEffect` digunakan untuk mengisi ulang data form ketika pengguna memilih buku yang ingin diedit.
 
 ### Context API
 
-`BookProvider` pada `src/context/BookContext.jsx` menjadi tempat state utama. Fungsi `addBook`, `updateBook`, `removeBook`, dan `toggleFinished` dibagikan melalui `useBooks()`, sehingga komponen kartu dan form tidak perlu menerima terlalu banyak prop.
+State buku dikelola pada `BookContext.jsx`. Di dalamnya terdapat fungsi:
+
+- `addBook()` untuk menambah buku.
+- `updateBook()` untuk mengubah data buku.
+- `removeBook()` untuk menghapus buku.
+- `toggleFinished()` untuk mengubah status selesai dibaca.
+
+Dengan Context API, komponen seperti `BookForm` dan `BookCard` bisa mengakses state tanpa harus menerima semua data melalui props dari parent.
+
+### Custom Hooks
+
+Ada dua custom hook yang digunakan:
+
+1. `useLocalStorage.js` — menyimpan dan membaca data buku dalam format JSON dari `localStorage`.
+2. `useBookStats.js` — menghitung total buku, jumlah buku berdasarkan status, jumlah buku selesai, dan persentase progres membaca.
 
 ### React Router
 
-`App.jsx` menggunakan `BrowserRouter`, `Routes`, dan `Route`. Halaman `/` berisi koleksi buku, sedangkan `/stats` berisi statistik. Navigasi dilakukan memakai `NavLink` dan `Link`.
+Navigasi dibuat menggunakan React Router:
 
-### Custom hooks
+- `/` menampilkan halaman koleksi buku.
+- `/stats` menampilkan statistik koleksi.
 
-- `useLocalStorage.js` menangani baca/tulis JSON secara persisten dan memiliki fallback jika browser menolak akses storage.
-- `useBookStats.js` menghitung total koleksi, jumlah status, jumlah buku selesai, dan persentase progres memakai `useMemo`.
+Navigasi dilakukan memakai `NavLink` dan `Link`.
 
-### Komponen reusable
+### Komponen Reusable
 
-`BookForm`, `BookFilter`, `BookList`, dan `BookCard` dipisahkan agar setiap komponen memiliki tanggung jawab yang jelas. Props utama pada komponen-komponen tersebut dilengkapi `PropTypes`.
+Komponen dibagi berdasarkan tanggung jawabnya supaya lebih mudah dikelola:
 
-## Testing
+- `BookForm` untuk input dan edit buku.
+- `BookFilter` untuk pencarian dan filter status.
+- `BookList` untuk menampilkan daftar buku.
+- `BookCard` untuk menampilkan satu item buku.
 
-Terdapat 7 unit test pada `src/test/app.test.jsx`, yaitu:
+Semua komponen yang menerima props sudah dilengkapi `PropTypes`.
 
-1. Menghitung statistik buku dengan custom hook.
-2. Memanggil callback pencarian.
-3. Memanggil callback filter status.
-4. Menampilkan error form ketika input kosong.
-5. Menyimpan buku baru setelah form valid.
-6. Menampilkan metadata dan aksi edit pada kartu buku.
-7. Mengubah status buku menjadi selesai.
+### Validasi Form
 
-Jalankan dengan:
-
-```bash
-npm test
-```
-
-Untuk laporan praktikum, simpan screenshot output terminal Vitest sebagai `testing-result.png` di folder `screenshots/` jika screenshot sudah diambil.
+Judul buku dan nama penulis wajib diisi. Jika pengguna menekan tombol simpan ketika salah satu input kosong, aplikasi tidak menyimpan data dan menampilkan pesan error di bawah input yang bermasalah.
 
 ## Screenshot Antarmuka
 
-Screenshot aplikasi dan hasil eksekusi test dapat ditambahkan ke folder `screenshots/` dengan nama berikut:
+### 1. Halaman Koleksi Buku
 
-- `01-koleksi-buku.png` — halaman koleksi utama.
-- `02-form-validasi.png` — feedback error ketika judul/penulis kosong.
-- `03-halaman-statistik.png` — halaman ringkasan koleksi.
-- `testing-result.png` — hasil `npm test` di terminal.
+Halaman utama berisi form tambah buku, statistik singkat, pencarian, filter, dan daftar koleksi.
 
-Screenshot perlu diambil setelah menjalankan aplikasi di browser dan unit test di terminal. Saya tidak menambahkan gambar contoh yang bukan hasil dari project ini agar dokumentasinya tetap sesuai kondisi aplikasi sebenarnya.
+![Halaman koleksi buku](screenshots/01-koleksi-buku.png)
 
-## Catatan Kode
+### 2. Validasi Form
 
-Komentar singkat ditempatkan pada bagian yang menjelaskan tanggung jawab khusus, seperti sinkronisasi `localStorage`, Context API, dan validasi form. Nama fungsi dan state dibuat cukup deskriptif supaya alurnya mudah diikuti saat praktikum.
+Screenshot berikut menunjukkan feedback error ketika judul atau penulis belum diisi.
+
+![Validasi form buku](screenshots/02-form-validasi.png)
+
+### 3. Halaman Statistik
+
+Halaman statistik menampilkan jumlah buku dan perbandingan status koleksi.
+
+![Halaman statistik buku](screenshots/03-halaman-statistik.png)
+
+## Testing
+
+Testing dilakukan menggunakan Vitest dan React Testing Library. Total ada **8 test yang berhasil dijalankan**:
+
+1. Menghitung statistik buku menggunakan `useBookStats`.
+2. Menguji callback pencarian pada `BookFilter`.
+3. Menguji callback filter status pada `BookFilter`.
+4. Memastikan error muncul ketika judul dan penulis kosong.
+5. Memastikan buku valid tersimpan ke `localStorage`.
+6. Memastikan data buku dan tombol edit tampil di `BookCard`.
+7. Memastikan status buku dapat diubah menjadi selesai.
+8. Memastikan form dapat dirender bersama Router dan Context API.
+
+Perintah yang digunakan:
+
+```powershell
+npm test
+```
+
+Hasil testing:
+
+```text
+Test Files  1 passed (1)
+Tests       8 passed (8)
+```
+
+![Hasil unit test](screenshots/testing-result.png)
+
+## Build Production
+
+Build production sudah diuji menggunakan perintah:
+
+```powershell
+npm run build
+```
+
+Hasil build berhasil dibuat oleh Vite tanpa error. Folder `dist/` akan dibuat setelah perintah tersebut selesai.
