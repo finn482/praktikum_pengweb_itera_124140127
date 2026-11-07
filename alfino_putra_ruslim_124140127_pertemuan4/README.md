@@ -6,11 +6,13 @@
 - **NIM:** 124140127
 - **Kelas:** RA
 
-## Deskripsi Singkat
+## Deskripsi Tugas
 
-Folder ini berisi tiga tugas dasar Python. Tugas pertama menghitung BMI dari berat dan tinggi badan. Tugas kedua mengolah data nilai lima mahasiswa menggunakan list dan dictionary. Tugas ketiga menunjukkan cara membuat modul Python sendiri, lalu memanggil fungsi geometri dan konversi suhu dari file `main.py`.
+Pada tugas ini saya membuat tiga program Python untuk menerapkan materi dasar yang sudah dipelajari, yaitu variabel, percabangan, perulangan, fungsi, list, dictionary, dan modul Python.
 
-Semua program dibuat dengan fungsi yang memiliki docstring, percabangan, perulangan, f-string, dan penamaan `snake_case`. Program tidak membutuhkan library tambahan.
+Program pertama digunakan untuk menghitung BMI. Program kedua digunakan untuk mengolah nilai beberapa mahasiswa dan menentukan grade masing-masing. Program ketiga berisi modul matematika buatan sendiri yang dipanggil dari `main.py`.
+
+Semua program dibuat tanpa library tambahan. Setiap fungsi juga diberi docstring supaya tujuan, parameter, dan hasil kembaliannya lebih jelas.
 
 ## Struktur Folder
 
@@ -28,109 +30,141 @@ alfino_putra_ruslim_124140127_pertemuan4/
     └── soal3-modul-matematika.png
 ```
 
-Folder `venv/`, `.venv/`, `__pycache__/`, dan file bytecode Python sudah dimasukkan ke `.gitignore` sehingga tidak ikut diunggah ke repository.
+Folder `venv/`, `.venv/`, `__pycache__/`, dan file bytecode Python sudah dimasukkan ke `.gitignore`, jadi tidak ikut diunggah ke Git.
 
 ## Penjelasan Program
 
-### 1. `tugas1_bmi.py`
+### 1. Program Penghitung BMI — `tugas1_bmi.py`
 
-Program meminta input berat badan dalam kilogram dan tinggi badan dalam meter. Fungsi `hitung_bmi()` menghitung BMI dengan rumus `berat / (tinggi * tinggi)`. Setelah itu fungsi `tentukan_kategori_bmi()` memakai `if-elif-else` untuk menampilkan empat kategori: berat badan kurang, normal, berlebih, atau obesitas. Input juga dicek supaya hanya menerima angka positif.
+Program meminta berat badan dalam kilogram dan tinggi badan dalam meter. Nilai BMI dihitung menggunakan rumus:
 
-### 2. `tugas2_nilai_mahasiswa.py`
+```text
+BMI = berat badan / (tinggi badan × tinggi badan)
+```
 
-Program memiliki list berisi lima dictionary mahasiswa. Setiap data memiliki nama, NIM, nilai UTS, UAS, dan tugas. Nilai akhir dihitung dengan bobot 30% UTS, 40% UAS, dan 30% tugas. Hasilnya diberi grade A sampai E, dicetak dalam tabel, lalu program mencari nilai akhir tertinggi dan terendah.
+Setelah nilai BMI didapatkan, program menggunakan percabangan `if-elif-else` untuk menentukan kategori berat badan:
 
-### 3. `math_operations.py` dan `main.py`
+- BMI kurang dari 18.5: Berat badan kurang.
+- BMI 18.5 sampai kurang dari 25: Berat badan normal.
+- BMI 25 sampai kurang dari 30: Berat badan berlebih.
+- BMI 30 atau lebih: Obesitas.
 
-`math_operations.py` berfungsi sebagai modul matematika kustom. Isinya adalah konstanta `PI`, fungsi luas dan keliling persegi, persegi panjang, lingkaran, serta konversi Celsius ke Fahrenheit dan Kelvin.
+Program juga melakukan validasi sederhana supaya input berat dan tinggi harus berupa angka positif.
 
-`main.py` menguji seluruh fungsi tersebut. Di dalamnya digunakan dua cara import, yaitu:
+### 2. Program Nilai Mahasiswa — `tugas2_nilai_mahasiswa.py`
+
+Data mahasiswa disimpan dalam sebuah list yang berisi lima dictionary. Setiap dictionary menyimpan nama, NIM, nilai UTS, nilai UAS, dan nilai tugas.
+
+Nilai akhir dihitung dengan bobot:
+
+```text
+Nilai akhir = (30% × UTS) + (40% × UAS) + (30% × nilai tugas)
+```
+
+Setelah itu, program menentukan grade A sampai E, mencetak data dalam bentuk tabel, serta mencari mahasiswa dengan nilai akhir tertinggi dan terendah.
+
+### 3. Modul Matematika — `math_operations.py` dan `main.py`
+
+File `math_operations.py` berisi konstanta `PI` dan beberapa fungsi, yaitu:
+
+- Luas dan keliling persegi.
+- Luas dan keliling persegi panjang.
+- Luas dan keliling lingkaran.
+- Konversi Celsius ke Fahrenheit.
+- Konversi Celsius ke Kelvin.
+
+File `main.py` digunakan untuk memanggil semua fungsi tersebut. Pada file ini saya menerapkan dua cara import modul:
 
 ```python
 import math_operations
 from math_operations import celsius_to_fahrenheit, luas_persegi_panjang
 ```
 
-## Cara Menjalankan di VS Code
+## Cara Menjalankan Program di VS Code
 
-1. Pastikan Python sudah terpasang. Cek dengan perintah:
+1. Pastikan Python sudah terpasang. Cek melalui terminal:
 
    ```powershell
    python --version
    ```
 
 2. Buka folder `alfino_putra_ruslim_124140127_pertemuan4` di VS Code.
-3. Buka terminal PowerShell melalui menu **Terminal → New Terminal**.
+3. Buka terminal PowerShell dengan menu **Terminal → New Terminal**.
 4. Jika terminal masih berada di folder repository utama, masuk ke folder tugas:
 
    ```powershell
    cd .\alfino_putra_ruslim_124140127_pertemuan4
    ```
 
-5. Jalankan setiap program berikut:
+5. Jalankan program satu per satu.
+
+   Untuk program BMI:
 
    ```powershell
    python tugas1_bmi.py
+   ```
+
+   Untuk program nilai mahasiswa:
+
+   ```powershell
    python tugas2_nilai_mahasiswa.py
+   ```
+
+   Untuk program modul matematika:
+
+   ```powershell
    python main.py
    ```
 
-   Pada Windows, jika `python` tidak dikenali, bisa mencoba:
+Jika perintah `python` tidak dikenali pada Windows, gunakan perintah `py`, misalnya:
 
-   ```powershell
-   py tugas1_bmi.py
-   py tugas2_nilai_mahasiswa.py
-   py main.py
-   ```
+```powershell
+py tugas1_bmi.py
+```
 
-6. Untuk program BMI, masukkan contoh berat `60` dan tinggi `1.65`. Hasilnya berada di kategori berat badan normal.
+## Contoh Hasil Program
 
-## Contoh Output
+### Hasil Program BMI
 
-### Soal 1 — BMI
+Dengan input berat badan 60 kg dan tinggi badan 1.65 m, hasil yang diperoleh adalah BMI 22.04 dengan kategori berat badan normal.
 
 ```text
-==========================================
-       PROGRAM PENGHITUNG BMI
-==========================================
-Masukkan berat badan (kg): 60
-Masukkan tinggi badan (m): 1.65
-
-Hasil Perhitungan
-------------------------------------------
-Berat badan : 60.00 kg
-Tinggi badan: 1.65 m
 Nilai BMI   : 22.04
 Kategori    : Berat badan normal
 ```
 
-### Soal 2 — Nilai Mahasiswa
+### Hasil Program Nilai Mahasiswa
 
-Program mencetak tabel berisi nama, NIM, nilai UTS, UAS, tugas, nilai akhir, dan grade. Program juga menampilkan mahasiswa dengan nilai akhir paling tinggi dan paling rendah.
+Program menampilkan tabel yang berisi nama, NIM, nilai UTS, nilai UAS, nilai tugas, nilai akhir, dan grade. Di bagian bawah tabel terdapat informasi mahasiswa dengan nilai paling tinggi dan paling rendah.
+
+### Hasil Program Modul Matematika
+
+Program menampilkan hasil luas dan keliling dari tiga bentuk geometri, kemudian menampilkan hasil konversi suhu 25°C ke Fahrenheit dan Kelvin.
+
+## Screenshot Hasil Eksekusi
+
+### Soal 1 — Program BMI
+
+Screenshot ini menunjukkan proses input berat dan tinggi badan serta hasil kategori BMI.
+
+![Hasil program BMI](screenshots/soal1-bmi.png)
+
+### Soal 2 — Program Nilai Mahasiswa
+
+Screenshot ini menunjukkan tabel nilai mahasiswa dan informasi nilai tertinggi serta terendah.
+
+![Hasil program nilai mahasiswa](screenshots/soal2-nilai-mahasiswa.png)
 
 ### Soal 3 — Modul Matematika
 
-Program mencetak hasil luas dan keliling persegi, persegi panjang, dan lingkaran, kemudian menampilkan hasil konversi 25°C ke Fahrenheit dan Kelvin.
+Screenshot ini menunjukkan hasil pemanggilan fungsi geometri dan konversi temperatur dari `main.py`.
 
-## Screenshot Bukti Eksekusi
+![Hasil program modul matematika](screenshots/soal3-modul-matematika.png)
 
-Screenshot terminal perlu diambil setelah program dijalankan di VS Code. Simpan dengan nama berikut di folder `screenshots/`:
+## Penerapan PEP 8
 
-1. `soal1-bmi.png` — hasil menjalankan `python tugas1_bmi.py`.
-2. `soal2-nilai-mahasiswa.png` — tabel nilai mahasiswa dan ringkasan nilai tertinggi/terendah.
-3. `soal3-modul-matematika.png` — hasil menjalankan `python main.py`.
-
-Contoh cara menambahkannya ke README setelah screenshot tersedia:
-
-```markdown
-![Output program BMI](screenshots/soal1-bmi.png)
-![Output nilai mahasiswa](screenshots/soal2-nilai-mahasiswa.png)
-![Output modul matematika](screenshots/soal3-modul-matematika.png)
-```
-
-## Catatan PEP 8
-
-- Indentasi menggunakan 4 spasi.
-- Nama fungsi dan variabel menggunakan `snake_case`.
-- Setiap fungsi memiliki docstring yang menjelaskan parameter dan nilai kembaliannya.
-- Kode dipisah menjadi beberapa fungsi supaya alurnya lebih mudah dibaca dan diuji.
+- Indentasi kode menggunakan 4 spasi.
+- Nama fungsi dan variabel menggunakan format `snake_case`.
+- Setiap fungsi memiliki docstring.
+- Setiap program memiliki fungsi `main()` dan pengecekan `if __name__ == "__main__":`.
+- Program dipisahkan menjadi beberapa fungsi supaya lebih mudah dibaca dan dirawat.
