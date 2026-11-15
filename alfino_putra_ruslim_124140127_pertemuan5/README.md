@@ -9,9 +9,9 @@
 
 ## Deskripsi Program
 
-Program ini merupakan sistem perpustakaan sederhana yang dibuat untuk menerapkan konsep Object-Oriented Programming (OOP) di Python. Program dapat menambahkan buku dan majalah ke katalog, menampilkan item yang tersedia, mencari item berdasarkan ID atau judul, serta mencoba proses peminjaman dan pengembalian.
+Program ini adalah sistem perpustakaan sederhana yang saya buat untuk mempraktikkan konsep OOP di Python. Alurnya dimulai dari menambahkan beberapa buku dan majalah ke katalog, menampilkan daftar item, mencari item berdasarkan ID atau judul, lalu mencoba proses peminjaman dan pengembalian.
 
-Saya memisahkan class ke beberapa file supaya struktur program lebih mudah dibaca. `LibraryItem` menjadi class dasar abstrak, sedangkan `Book` dan `Magazine` menjadi turunan yang memiliki detail dan aturan denda masing-masing.
+Class saya pisahkan ke beberapa file supaya programnya tidak terlalu panjang dalam satu file. `LibraryItem` dipakai sebagai class dasar abstrak, sedangkan `Book` dan `Magazine` menjadi turunannya dengan detail serta aturan denda yang berbeda.
 
 ## Struktur Folder
 
@@ -32,7 +32,7 @@ alfino_putra_ruslim_124140127_pertemuan5/
 
 ### 1. Class dan Object
 
-Class yang digunakan dalam program ini adalah `LibraryItem`, `Book`, `Magazine`, `Library`, dan `Member`. Class tersebut digunakan sebagai blueprint, kemudian dibuat object nyata di `main.py`, misalnya object `buku_1`, `buku_2`, dan `majalah_1`.
+Class yang digunakan adalah `LibraryItem`, `Book`, `Magazine`, `Library`, dan `Member`. Class tersebut menjadi blueprint untuk object yang dibuat di `main.py`, seperti `buku_1`, `buku_2`, dan `majalah_1`.
 
 ### 2. Inheritance
 
@@ -135,7 +135,7 @@ Jumlah pinjaman anggota: 1
 
 ## Screenshot Output
 
-Screenshot terminal diambil setelah menjalankan `python main.py`. Bukti tersebut sebaiknya memperlihatkan proses penambahan item, katalog, pencarian, peminjaman, dan denda polymorphism.
+Screenshot berikut adalah hasil menjalankan `python main.py` di terminal PowerShell. Di dalamnya terlihat proses penambahan item, katalog, pencarian, peminjaman, perubahan item yang tersedia, perhitungan denda, dan pengembalian buku.
 
 ![Output sistem manajemen perpustakaan](screenshots/output-perpustakaan.png)
 
