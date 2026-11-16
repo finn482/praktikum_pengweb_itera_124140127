@@ -7,6 +7,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy.orm import configure_mappers, sessionmaker
 
 from .mahasiswa import Mahasiswa
+from .matakuliah import Matakuliah
 from .meta import Base
 
 configure_mappers()
@@ -48,4 +49,4 @@ def includeme(config):
     )
 
 
-__all__ = ["Base", "Mahasiswa"]
+__all__ = ["Base", "Mahasiswa", "Matakuliah"]

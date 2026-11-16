@@ -7,10 +7,23 @@ from datetime import date
 from pyramid.paster import bootstrap, setup_logging
 from sqlalchemy.exc import OperationalError
 
-from ..models import Mahasiswa
+from ..models import Mahasiswa, Matakuliah
+
+
+MATKUL_AWAL = [
+    {"kode_mk": "IF2110", "nama_mk": "Pemrograman Web", "sks": 3, "semester": 5},
+    {"kode_mk": "IF3140", "nama_mk": "Basis Data", "sks": 4, "semester": 3},
+    {"kode_mk": "IF2120", "nama_mk": "Struktur Data", "sks": 3, "semester": 3},
+]
 
 
 def setup_models(dbsession):
+    """Menambahkan data Mahasiswa dan Matakuliah awal."""
+    _seed_mahasiswa(dbsession)
+    _seed_matakuliah(dbsession)
+
+
+def _seed_mahasiswa(dbsession):
     """Menambahkan data Mahasiswa jika NIM belum terdaftar."""
     mahasiswa_awal = [
         {
@@ -32,6 +45,14 @@ def setup_models(dbsession):
         exists = dbsession.query(Mahasiswa).filter_by(nim=data["nim"]).first()
         if exists is None:
             dbsession.add(Mahasiswa(**data))
+
+
+def _seed_matakuliah(dbsession):
+    """Menambahkan data Matakuliah jika kode MK belum terdaftar."""
+    for data in MATKUL_AWAL:
+        exists = dbsession.query(Matakuliah).filter_by(kode_mk=data["kode_mk"]).first()
+        if exists is None:
+            dbsession.add(Matakuliah(**data))
 
 
 def parse_args(argv):
