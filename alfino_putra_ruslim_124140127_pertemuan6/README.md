@@ -238,89 +238,73 @@ Response GET list berbentuk:
 }
 ```
 
-## Pengujian dengan cURL di PowerShell
+## Pengujian API di PowerShell
 
-Jalankan server di satu terminal PowerShell menggunakan `pserve development.ini`, lalu jalankan contoh berikut dari terminal PowerShell lain. Gunakan `curl.exe` agar perintah menjalankan cURL, bukan alias `Invoke-WebRequest` milik PowerShell. Pastikan setiap command berakhir dengan `-i` untuk melihat HTTP status.
+Jalankan server di satu terminal PowerShell dengan `pserve development.ini`, lalu jalankan pengujian dari terminal kedua. Di Windows, pengiriman JSON lewat `curl.exe -d` kadang terkendala quoting. Contoh di bawah memakai library `requests`, yang mengirim JSON dengan benar.
 
-### A. GET seluruh Matakuliah
-
-```powershell
-curl.exe -i http://localhost:6543/api/matakuliah
-```
-
-Tujuan: mengambil daftar mata kuliah. Diharapkan **HTTP 200**.
-
-Contoh response:
-
-```json
-{"matakuliah":[{"id":1,"kode_mk":"IF2110","nama_mk":"Pemrograman Web","sks":3,"semester":5}]}
-```
-
-### B. GET detail Matakuliah
+Kalau `requests` belum terpasang, jalankan sekali:
 
 ```powershell
-curl.exe -i http://localhost:6543/api/matakuliah/1
+pip install requests
 ```
 
-Tujuan: melihat mata kuliah dengan ID 1. Diharapkan **HTTP 200** jika ada.
+Contoh perintah Python berikut bisa dimasukkan di PowerShell. Pastikan server tetap berjalan di terminal pertama.
 
-```json
-{"matakuliah":{"id":1,"kode_mk":"IF2110","nama_mk":"Pemrograman Web","sks":3,"semester":5}}
-```
-
-### C. POST tambah Matakuliah
+### A. GET seluruh Matakuliah — HTTP 200
 
 ```powershell
-curl.exe -i -X POST http://localhost:6543/api/matakuliah -H "Content-Type: application/json" -d '{"kode_mk":"IF2150","nama_mk":"Pemrograman Berorientasi Objek","sks":3,"semester":5}'
+python -c "import requests; r=requests.get('http://localhost:6543/api/matakuliah'); print(r.status_code); print(r.text)"
 ```
 
-Tujuan: menambahkan data baru. Diharapkan **HTTP 201**; ID di response dibuat oleh database.
-
-```json
-{"success":true,"matakuliah":{"id":4,"kode_mk":"IF2150","nama_mk":"Pemrograman Berorientasi Objek","sks":3,"semester":5}}
-```
-
-### D. PUT ubah Matakuliah
-
-Jalankan setelah POST dan ganti `4` dengan ID yang didapat dari response POST.
+### B. GET detail Matakuliah — HTTP 200 atau 404
 
 ```powershell
-curl.exe -i -X PUT http://localhost:6543/api/matakuliah/4 -H "Content-Type: application/json" -d '{"kode_mk":"IF2150","nama_mk":"Pemrograman Berorientasi Objek Lanjut","sks":4,"semester":6}'
+python -c "import requests; r=requests.get('http://localhost:6543/api/matakuliah/1'); print(r.status_code); print(r.text)"
 ```
 
-Tujuan: memperbarui data. Diharapkan **HTTP 200**.
-
-```json
-{"success":true,"matakuliah":{"id":4,"kode_mk":"IF2150","nama_mk":"Pemrograman Berorientasi Objek Lanjut","sks":4,"semester":6}}
-```
-
-### E. DELETE Matakuliah
+### C. POST tambah Matakuliah — HTTP 201
 
 ```powershell
-curl.exe -i -X DELETE http://localhost:6543/api/matakuliah/4
+python -c "import requests; r=requests.post('http://localhost:6543/api/matakuliah', json={'kode_mk':'IF2150','nama_mk':'Pemrograman Berorientasi Objek','sks':3,'semester':5}); print(r.status_code); print(r.text)"
 ```
 
-Tujuan: menghapus data dengan ID tersebut. Diharapkan **HTTP 200**.
+Gunakan kode yang belum ada. ID data baru akan terlihat di response.
 
-```json
-{"success":true,"message":"Matakuliah berhasil dihapus"}
+### D. PUT ubah Matakuliah — HTTP 200
+
+Ganti `4` dengan ID yang dikembalikan oleh POST.
+
+```powershell
+python -c "import requests; r=requests.put('http://localhost:6543/api/matakuliah/4', json={'kode_mk':'IF2150','nama_mk':'Pemrograman Berorientasi Objek Lanjut','sks':4,'semester':6}); print(r.status_code); print(r.text)"
 ```
 
-### Uji validasi dan error
+### E. DELETE Matakuliah — HTTP 200
 
-Skenario berikut diharapkan menghasilkan response error JSON dengan status yang dicantumkan. Contoh pesannya mengikuti implementasi saat ini.
+Ganti `4` dengan ID yang ingin dihapus.
 
-| Tujuan | Perintah PowerShell | Status yang diharapkan | Contoh response |
-|---|---|---:|---|
-| ID tidak ditemukan | `curl.exe -i http://localhost:6543/api/matakuliah/999` | 404 | `{"error":"Matakuliah tidak ditemukan"}` |
-| Field wajib tidak lengkap | `curl.exe -i -X POST http://localhost:6543/api/matakuliah -H "Content-Type: application/json" -d '{"kode_mk":"IF2200","nama_mk":"Jaringan Komputer","sks":3}'` | 400 | `{"error":"Field semester wajib diisi"}` |
-| Kode MK duplikat (gunakan kode yang sudah ada) | `curl.exe -i -X POST http://localhost:6543/api/matakuliah -H "Content-Type: application/json" -d '{"kode_mk":"IF2110","nama_mk":"Duplikat","sks":3,"semester":5}'` | 400 | `{"error":"Kode mata kuliah sudah digunakan"}` |
-| SKS negatif | `curl.exe -i -X POST http://localhost:6543/api/matakuliah -H "Content-Type: application/json" -d '{"kode_mk":"IF2201","nama_mk":"Jaringan Komputer","sks":-1,"semester":3}'` | 400 | `{"error":"Field sks harus berupa integer positif"}` |
-| Semester nol | `curl.exe -i -X POST http://localhost:6543/api/matakuliah -H "Content-Type: application/json" -d '{"kode_mk":"IF2202","nama_mk":"Jaringan Komputer","sks":3,"semester":0}'` | 400 | `{"error":"Field semester harus berupa integer positif"}` |
-| PUT SKS tidak valid | `curl.exe -i -X PUT http://localhost:6543/api/matakuliah/1 -H "Content-Type: application/json" -d '{"sks":-2}'` | 400 | `{"error":"Field sks harus berupa integer positif"}` |
-| DELETE ID tidak ditemukan | `curl.exe -i -X DELETE http://localhost:6543/api/matakuliah/999` | 404 | `{"error":"Matakuliah tidak ditemukan"}` |
+```powershell
+python -c "import requests; r=requests.delete('http://localhost:6543/api/matakuliah/4'); print(r.status_code); print(r.text)"
+```
 
-Skenario tambahan: untuk mencoba DELETE atau PUT yang sukses, tambahkan data dulu dengan POST dan gunakan ID yang dikembalikan. Request dengan kode mata kuliah berulang menolak duplikasi sebelum data disimpan.
+### F. Uji validasi dan error
+
+Contoh mengirim SKS negatif. Hasil yang diharapkan adalah **HTTP 400** dengan pesan bahwa SKS harus integer positif:
+
+```powershell
+python -c "import requests; r=requests.post('http://localhost:6543/api/matakuliah', json={'kode_mk':'IF2198','nama_mk':'Mata Kuliah Uji','sks':-1,'semester':5}); print(r.status_code); print(r.text)"
+```
+
+Skenario validasi lainnya:
+
+| Tujuan pengujian | Hasil yang diharapkan |
+|---|---|
+| GET ID yang tidak ditemukan | HTTP 404, `Matakuliah tidak ditemukan` |
+| POST tanpa satu atau lebih field wajib | HTTP 400, field wajib disebutkan |
+| POST dengan kode MK yang sudah dipakai | HTTP 400, kode mata kuliah sudah digunakan |
+| POST dengan SKS negatif atau nol | HTTP 400, SKS harus integer positif |
+| POST dengan semester nol atau negatif | HTTP 400, semester harus integer positif |
+| PUT dengan SKS/semester tidak valid | HTTP 400, pesan validasi terkait |
+| DELETE ID yang tidak ditemukan | HTTP 404, `Matakuliah tidak ditemukan` |
 
 ## Pengujian Otomatis
 
@@ -334,20 +318,29 @@ Pengujian mencakup validasi dan operasi Matakuliah serta beberapa endpoint Mahas
 
 ## Bukti Screenshot Pengujian
 
-Screenshot belum disertakan agar tidak menampilkan gambar bukti yang tidak benar-benar diambil. Jalankan aplikasi dan pengujian di terminal, lalu simpan screenshot asli di folder `screenshots/` dengan nama berikut:
+Screenshot yang sudah diambil dari terminal dan dimasukkan ke repository:
 
-1. `screenshots/01-get-matakuliah.png` — hasil GET seluruh mata kuliah beserta status `200`.
-2. `screenshots/02-post-matakuliah.png` — hasil POST data baru beserta status `201`.
-3. `screenshots/03-put-delete-matakuliah.png` — hasil PUT dan DELETE beserta statusnya.
-4. `screenshots/04-validasi-matakuliah.png` — contoh error validasi (misalnya SKS negatif) dengan status `400`.
-5. `screenshots/05-pytest.png` — hasil `python -m pytest -q`.
-6. `screenshots/06-mahasiswa-api.png` — contoh request/response endpoint Mahasiswa.
+### GET seluruh Matakuliah
 
-Setelah screenshot dibuat, sematkan dengan Markdown, misalnya:
-
-```markdown
 ![Hasil GET seluruh Matakuliah](screenshots/01-get-matakuliah.png)
-```
+
+### POST Matakuliah
+
+![Hasil POST Matakuliah](screenshots/02-post-matakuliah.png)
+
+### PUT Matakuliah
+
+![Hasil PUT Matakuliah](screenshots/03-put-matakuliah.png)
+
+### DELETE Matakuliah
+
+![Hasil DELETE Matakuliah](screenshots/04-delete-matakuliah.png)
+
+### Validasi SKS negatif
+
+![Hasil validasi SKS negatif](screenshots/05-validasi-matakuliah.png)
+
+Screenshot tambahan untuk hasil `pytest` dan endpoint Mahasiswa belum dimasukkan. Kalau sudah diambil, simpan sebagai `screenshots/06-pytest.png` dan `screenshots/07-mahasiswa-api.png`, lalu tambahkan link gambarnya di bagian ini.
 
 ## Catatan Implementasi
 
