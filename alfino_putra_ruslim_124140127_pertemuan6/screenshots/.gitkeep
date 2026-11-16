@@ -1,0 +1,9 @@
+# Folder untuk menyimpan screenshot pengujian aplikasi.
+
+Isi folder ini dengan tangkapan layar asli dari hasil pengujian:
+- 01-get-matakuliah.png
+- 02-post-matakuliah.png
+- 03-put-delete-matakuliah.png
+- 04-validasi-matakuliah.png
+- 05-pytest.png
+- 06-mahasiswa-api.png
